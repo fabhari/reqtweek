@@ -1,0 +1,143 @@
+/* General Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+
+
+.container {
+  background: white;
+  padding: 10px;
+  border-radius: 10px;
+  /* box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); */
+  width: 100%;
+  /* max-width: 500px; */
+}
+
+.title {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: #333;
+  font-size: 2rem;
+}
+
+.input-group {
+  margin-bottom: 17px;
+}
+
+.label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #555;
+  font-weight: bold;
+}
+
+.input {
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  width: 100%;
+  padding: 6px 8px;
+  font-size: 13px;
+  transition: border-color .3s ease;
+}
+
+.input:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+.textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.button-group {
+  display: flex;
+  gap: 1rem;
+  /* margin-top: 1.5rem; */
+}
+
+.view-all-btn,
+.save-btn,
+.clear-btn {
+  flex: 1;
+  padding: 5px;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.view-all-btn{
+  color: #000000;
+  background-color: #82aa55cf;
+}
+
+.save-btn {
+  background-color: #007bff;
+  color: white;
+}
+
+.save-btn:hover {
+  background-color: #0056b3;
+}
+
+.clear-btn {
+  background-color: #6c757d;
+  color: white;
+}
+
+.clear-btn:hover {
+  background-color: #5a6268;
+}
+
+.sessions {
+  margin-top: 2rem;
+}
+
+.sessions-title {
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.session-list {
+  padding-top: 20px;
+  list-style: none;
+  height: 20em;
+  overflow: scroll;
+}
+.session{
+  display:flex;
+  font-size:15px;
+  gap:10px;
+  align-items:center;
+  justify-content:space-between
+}
+
+.session-item {
+  color: #333;
+  background: #dcdedf;
+  border-radius: 5px;
+  margin-bottom: 5px;
+  font-size: 15px;
+  padding: 5px;
+  display: flex
+;
+  transition: background-color .3s;
+  justify-content: space-between;
+
+  /* background: #f8f9fa;
+  padding: 0.75rem;
+  border-radius: 5px;
+  margin-bottom: 0.5rem;
+  color: #333;
+  transition: background-color 0.3s ease; */
+}
+
+.session-item:hover {
+  background-color: #e9ecef;
+}
