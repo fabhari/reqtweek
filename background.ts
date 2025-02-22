@@ -7,51 +7,68 @@ chrome.sidePanel
 
   chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
-    console.log("Received message from chrome:", request);
-    console.log(request)
+    //console.log("Received message from chrome:", request);
+    //console.log(request)
     
+    const requestHeaders1 = Object.entries(request?.header).map(([key, value]) => ({
+      header: key,
+      operation: chrome.declarativeNetRequest.HeaderOperation.SET,
+      value:  String(value) 
+    }));
+
+    //console.log(requestHeaders1)
     if (request) {
-      // chrome.tabs.create({ url: 'http://example.com' }, (tab) => {
-      //   console.log("Opened new tab with ID:", tab.id);
-      //   chrome.declarativeNetRequest.updateSessionRules({
-      //     addRules: [{
-      //       id: tab.id,
-      //       priority: 1,
-      //       action: {
-      //         type: chrome.declarativeNetRequest.RuleActionType.MODIFY_HEADERS,
-      //         requestHeaders: [{
-      //           header: "computer-name",
-      //           operation: chrome.declarativeNetRequest.HeaderOperation.SET,
-      //           value: "testing"
-      //         }]
-      //       },
-      //       condition: {
-      //         urlFilter: "|http*",
-      //         tabIds: [tab.id],
-      //         resourceTypes: [
-      //           chrome.declarativeNetRequest.ResourceType.MAIN_FRAME,
-      //           chrome.declarativeNetRequest.ResourceType.SUB_FRAME,
-      //           chrome.declarativeNetRequest.ResourceType.STYLESHEET,
-      //           chrome.declarativeNetRequest.ResourceType.SCRIPT,
-      //           chrome.declarativeNetRequest.ResourceType.IMAGE,
-      //           chrome.declarativeNetRequest.ResourceType.FONT,
-      //           chrome.declarativeNetRequest.ResourceType.OBJECT,
-      //           chrome.declarativeNetRequest.ResourceType.XMLHTTPREQUEST
-      //         ]
-      //       }
-      //     }]
-      //   });
-      // });
+      chrome.tabs.create({ url: request?.url }, (tab) => {
+        //console.log("Opened new tab with ID:", tab.id);
+     
+        chrome.declarativeNetRequest.updateSessionRules({
+          addRules: [{
+            id: tab.id,
+            priority: 1,
+            action: {
+              type: chrome.declarativeNetRequest.RuleActionType.MODIFY_HEADERS,
+              requestHeaders: requestHeaders1
+            },
+            condition: {
+              urlFilter: "|http*",
+              tabIds: [tab.id],
+              resourceTypes: [
+                chrome.declarativeNetRequest.ResourceType.MAIN_FRAME,
+                chrome.declarativeNetRequest.ResourceType.SUB_FRAME,
+                chrome.declarativeNetRequest.ResourceType.STYLESHEET,
+                chrome.declarativeNetRequest.ResourceType.SCRIPT,
+                chrome.declarativeNetRequest.ResourceType.IMAGE,
+                chrome.declarativeNetRequest.ResourceType.FONT,
+                chrome.declarativeNetRequest.ResourceType.OBJECT,
+                chrome.declarativeNetRequest.ResourceType.XMLHTTPREQUEST
+              ]
+            }
+          }],
+          removeRuleIds: [tab.id]
+        },()=>{
+          if (chrome.runtime.lastError) {
+            console.error('Error updating session rule:', chrome.runtime.lastError);
+            sendResponse({ success: false, error: "process has failed.." });
+
+          } else {
+            //console.log('Session rule added successfully');
+            chrome.tabs.update(tab.id, { url: request?.url }, () => {
+              //console.log("Tab updated to load the specific URL.");
+            });
+            sendResponse({ success: true, data:tab.id });
+
+          }
+        });
+      });
     }
-    // Return true to indicate you want to send a response asynchronously
     return true;
   });
 
 // chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
-//   // console.log(tab.url)
+//   // //console.log(tab.url)
 //       if (changeInfo.status === 'complete' && tab.url.includes('/screen/welcomescreen')) {
 //         chrome.tabs.remove(tabId, () => {
-//           console.log(`Closed tab with ID: ${tabId} as it matched the URL condition.`);
+//           //console.log(`Closed tab with ID: ${tabId} as it matched the URL condition.`);
 //         });
 //       }
 //     });
@@ -61,7 +78,7 @@ chrome.sidePanel
     //     tabs.forEach((tab) => {
     //       if (tab.url.includes('/screen/welcomescreen')) {
     //         chrome.tabs.remove(tab.id, () => {
-    //           console.log(`Closed tab with ID: ${tab.id} on startup as it matched the URL condition.`);
+    //           //console.log(`Closed tab with ID: ${tab.id} on startup as it matched the URL condition.`);
     //         });
     //       }
     //     });
