@@ -55,7 +55,7 @@ class Trie {
 }
 
 // React Component
-const TrieSearch = ({ data , closeCallback, openCallback}) => {
+const TrieSearch = ({ data , closeCallback, openCallback , editCallback}) => {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState([]);
   const trieRef = useRef(new Trie()); // Persist Trie across renders
@@ -106,20 +106,19 @@ const TrieSearch = ({ data , closeCallback, openCallback}) => {
               {data.map((session, index) => {
                 return (
                   <div key={`${index}-${session?.id}`} className="session" >
-                    <li className="session-item" onClick={()=>openCallback(session?.id)}>
+                    <li className="session-item" style={{cursor:'pointer'}} onClick={()=>openCallback(session?.id)}>
                       {session?.name}   
                     </li>
+                    <div className="button-group">
+                    {/* <button className="close-btn" onClick={()=>editCallback(session?.id)}> ✏️ </button>  */}
                     <button className="close-btn" onClick={()=>closeCallback(session?.id)}> ❌ </button> 
+                    </div>
                   </div>
                 );
               })}
             </ul>
         </div> :  <div className="test"> No sessions found</div> 
-
       )}
-      
-
-
     </div>
   );
 };

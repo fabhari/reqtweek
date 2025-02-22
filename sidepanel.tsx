@@ -5,6 +5,7 @@ import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import ReactSearchBox from "react-search-box";
+import Form from 'react-bootstrap/Form';
 
 // {
 //   "computer" : "900"
@@ -16,22 +17,8 @@ const ReqTweek = () => {
   const [sessionName, setSessionName] = useState("");
   const [sessions, setSessions] = useState([]);
   const [alert_, setAlert] = useState(false);
-  
+  const [isChecked, setIsChecked] = useState(false);
 
-  const test_data = [
-   {
-      id: "0gRM4",
-      name: "Eustonscreen2",
-      url: "https://prod.env.railpoint.org/screen/welcomescreen",
-      header: { "Computer-name": "RP100601" },
-    },
-   {
-      id: "MqZQc",
-      name: "PaddingtonScreen1",
-      url: "https://prod.env.railpoint.org/screen/welcomescreen",
-      header: { "Computer-name": "RP100602" },
-    },
-  ];
 
   React.useEffect(() => {
     chrome.storage.local.get(null, (items) => {
@@ -50,7 +37,7 @@ const ReqTweek = () => {
           const updatedData = { ...item[id], header: parsedData };
           chrome.storage.local.set({ [id]: updatedData }, () => {
             //console.log("Session data updated in local storage with ID:", id);
-            setSessions(sessions.map(session => session.id === id ? updatedData : session));
+              setSessions(sessions.map(session => session.id === id ? updatedData : session));
           });
         } else {
           //console.log("No session found with ID:", id);
@@ -72,9 +59,7 @@ const ReqTweek = () => {
 
   function sendMessageToBackground(data) {
     //console.log("data about send to background is", data);
-
     chrome.runtime.sendMessage(data, (response) => {
-      //console.log("Response from background:", response);
       if(response.success){
         //console.log("sent data ", data)
       }
@@ -95,7 +80,7 @@ const ReqTweek = () => {
       alert("Please fill in all fields before saving.");
     } else {
       const id = generateId();
-      const data = { url, header : JSON.parse(json),name : sessionName, id }
+      const data = { url, header : JSON.parse(json),name : sessionName, id , isChecked}
       //console.log("Saved:", data);
      setSessions([...sessions, data]);
 
@@ -106,7 +91,7 @@ const ReqTweek = () => {
       setAlert(true);
       setTimeout(() => {
         setAlert(false);
-      }, 2000);
+      }, 1000);
 
     }
   };
@@ -137,6 +122,15 @@ const ReqTweek = () => {
           }
         });
       });
+    });
+  }
+
+  const handleEditSession =(id)=>{
+    chrome.storage.local.get(id, (item) => {
+      if (item[id]) {
+        const updatedData = item[id] ;
+
+      }
     });
   }
 
@@ -196,6 +190,14 @@ const ReqTweek = () => {
           className="input"
         />
       </div>
+      <Form style={{marginBottom:'10px'}}>
+      <Form.Check // prettier-ignore
+        onChange={(e) => setIsChecked(e.target.checked)}
+        type="switch"
+        id="custom-switch"
+        label="Mobile View"
+      />
+      </Form>
       <div className="button-group">
         <button onClick={handleSave} className="save-btn">
           Save
@@ -207,22 +209,7 @@ const ReqTweek = () => {
     </div>
       </Tab>
       <Tab eventKey="Sessions" title="Sessions">
-      <TrieSearch data={sessions} closeCallback={handleCloseSession} openCallback={handleOpenSession}/>
-       {/* {sessions.length > 0 ? 
-        <div className="sessions">
-            <ul>
-              {sessions.map((session, index) => {
-                return (
-                  <div key={`${index}-${session?.id}`} className="session" >
-                    <li className="session-item" onClick={()=>handleOpenSession(session?.id)}>
-                      {session?.name}   
-                    </li>
-                    <button className="close-btn" onClick={()=>handleCloseSession(session?.id)}> ❌ </button> 
-                  </div>
-                );
-              })}
-            </ul>
-        </div> :  <div> No sessions found</div> } */}
+      <TrieSearch data={sessions} closeCallback={handleCloseSession} openCallback={handleOpenSession} editCallback={handleEditSession}/>
       </Tab>
     </Tabs>
 

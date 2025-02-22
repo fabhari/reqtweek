@@ -1,7 +1,7 @@
 {
   "name": "reqtweek",
   "displayName": "ReqTweek",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "ReqTweek enables per-tab proxying with custom headers for web app testing. Supports session saving and restoring in new tabs.",
   "author": "fabhari36@gmail.com",
   "scripts": {
@@ -45,7 +45,9 @@
     "permissions": [
       "declarativeNetRequest",
       "sidePanel",
-      "storage"
+      "storage",
+      "debugger",
+      "system.display"
     ]
   }
 }
