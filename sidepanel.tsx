@@ -18,7 +18,7 @@ const ReqTweek = () => {
   const [sessions, setSessions] = useState([]);
   const [alert_, setAlert] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
-
+  const [activeTab, setActiveTab] = useState("home");
 
   React.useEffect(() => {
     chrome.storage.local.get(null, (items) => {
@@ -126,10 +126,17 @@ const ReqTweek = () => {
   }
 
   const handleEditSession =(id)=>{
+    // console.log("Trying to  edit this data", id);
+
     chrome.storage.local.get(id, (item) => {
+      // console.log("Trying to  edit this data", item[id]);
       if (item[id]) {
         const updatedData = item[id] ;
-
+          // console.log("Trying to  edit this data", updatedData);
+          setUrl(updatedData?.url || '');
+          setSessionName(updatedData?.name || '');
+          setJson(JSON.stringify((updatedData?.header|| {})));
+          setActiveTab("home")
       }
     });
   }
@@ -156,7 +163,10 @@ const ReqTweek = () => {
       </div>
       }
     <Tabs
-      defaultActiveKey="home"
+      defaultActiveKey={activeTab}
+      activeKey={activeTab}
+      onSelect={(k) => setActiveTab(k)}
+      // key={activeTab}
       id="uncontrolled-tab-example"
       className="mb-3"
     >

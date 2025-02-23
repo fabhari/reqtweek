@@ -110,7 +110,7 @@ const TrieSearch = ({ data , closeCallback, openCallback , editCallback}) => {
                       {session?.name}   
                     </li>
                     <div className="button-group">
-                    {/* <button className="close-btn" onClick={()=>editCallback(session?.id)}> ✏️ </button>  */}
+                    <button className="close-btn" onClick={()=>editCallback(session?.id)}> 📑  </button> 
                     <button className="close-btn" onClick={()=>closeCallback(session?.id)}> ❌ </button> 
                     </div>
                   </div>
