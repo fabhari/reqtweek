@@ -1,7 +1,7 @@
 {
   "name": "reqtweek",
   "displayName": "ReqTweek",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "ReqTweek enables per-tab proxying with custom headers for web app testing. Supports session saving and restoring in new tabs.",
   "author": "fabhari36@gmail.com",
   "scripts": {
@@ -10,10 +10,10 @@
     "package": "plasmo package"
   },
   "icons": {
-    "16": "assets/icon16.png",
-    "32": "assets/icon32.png",
-    "48": "assets/icon48.png",
-    "128": "assets/icon128.png"
+    "16": "assets/16.png",
+    "32": "assets/32.png",
+    "48": "assets/48.png",
+    "128": "assets/128.png"
   },
   "dependencies": {
     "@base-ui-components/react": "1.0.0-alpha.5",

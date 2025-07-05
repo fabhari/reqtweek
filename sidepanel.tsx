@@ -79,14 +79,28 @@ const ReqTweek = () => {
     if (!url || !json || !sessionName) {
       alert("Please fill in all fields before saving.");
     } else {
+
+      const existingSession = sessions.find(session => session.name === sessionName);
+
+      if (existingSession) 
+      {
+        const updatedData = { ...existingSession, url, header: JSON.parse(json), isChecked };
+        setSessions(sessions.map(session => session.id === existingSession.id ? updatedData : session));
+  
+        chrome.storage.local.set({ [existingSession.id]: updatedData }, () => {
+          console.log("Existing session updated in local storage with ID:", existingSession.id);
+        });
+      }
+     else {
+      // Create a new session
       const id = generateId();
-      const data = { url, header : JSON.parse(json),name : sessionName, id , isChecked}
-      //console.log("Saved:", data);
-     setSessions([...sessions, data]);
+      const data = { url, header: JSON.parse(json), name: sessionName, id, isChecked };
+      setSessions([...sessions, data]);
 
       chrome.storage.local.set({ [data.id]: data }, () => {
-        //console.log("Data stored in local storage with ID:", data.id);
+        console.log("New session stored in local storage with ID:", data.id);
       });
+    }
    
       setAlert(true);
       setTimeout(() => {
